@@ -1,0 +1,16 @@
+<div>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div class="image-user">
+      <img [src]="data.avt" alt="avt" />
+    </div>
+    <div class="username" style="color: white">
+      <span style="font-size: 20px">{{ data.username }}</span>
+      <span> {{ data.message }}</span>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <button mat-icon-button (click)="snackBarRef.dismiss()">
+      <mat-icon style="color: white">close</mat-icon>
+    </button>
+  </div>
+</div>

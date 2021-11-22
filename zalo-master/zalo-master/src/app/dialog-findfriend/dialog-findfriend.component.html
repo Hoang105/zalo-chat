@@ -1,0 +1,64 @@
+<div fxLayout="row" fxLayoutAlign="end center">
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>
+<br />
+<div
+  *ngIf="!ishowInfo"
+  fxLayout="row"
+  fxLayoutAlign="space-around center"
+  class="iId"
+>
+  <input
+    [(ngModel)]="userid"
+    placeholder="Nhập số điện thoại"
+    (keyup.enter)="findid()"
+  />
+  <button mat-icon-button (click)="findid()">
+    <mat-icon>search</mat-icon>
+  </button>
+</div>
+<div style="color: red; margin-top: 50px" *ngIf="isShowErrPhoneNumber">
+  * nhập sai định dạng
+</div>
+<div *ngIf="isShowProcess">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div
+  *ngIf="isShowNoDataFound"
+  style="
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    padding-top: 20px;
+  "
+>
+  KHÔNG TÌM THẤY
+</div>
+<div
+  *ngIf="ishowInfo"
+  class="info"
+  fxLayout="column"
+  fxLayoutAlign="space-around center"
+>
+  <h1 mat-dialog-title style="text-align: center">Thông tin người dùng</h1>
+  <div class="image-user">
+    <img [src]="dataUser.imgurl" alt="avt" />
+  </div>
+  <div class="username">{{ dataUser.username }}</div>
+  <div class="birthday">
+    Ngày Sinh: {{ dataUser.birthday | date: "dd/MM/yyyy" }}
+  </div>
+
+  <div>Giới Tính: {{ dataUser.gender }}</div>
+</div>
+
+<div *ngIf="dataUser.isfriend">
+  <button (click)="sendLoimoi()" fxFlexFill mat-button color="warn">
+    Gửi lời mời kết bạn
+  </button>
+</div>

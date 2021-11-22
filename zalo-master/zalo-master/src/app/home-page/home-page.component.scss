@@ -1,0 +1,90 @@
+.toolbar {
+  background-color: #0589ff;
+}
+.list-chat {
+  background-color: whitesmoke;
+
+  h3 {
+    font-weight: bold;
+    padding: 15px 15px 0 15px;
+    margin: 0;
+  }
+  mat-divider {
+    background-color: #e8eaed;
+  }
+  mat-icon-button {
+    color: #323233;
+  }
+}
+.content-chat {
+  background-color: aquamarine;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+mat-button-toggle {
+  mat-icon {
+    color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
+.image-info {
+  background-image: url("../../assets/shiba1.jpg");
+  background-size: cover;
+}
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: none !important;
+}
+.avatar {
+  background-color: transparent;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  cursor: pointer;
+}
+mat-select-value {
+  color: black;
+}
+select {
+  font-size: 15px;
+  margin: 5px 15px 5px 0px;
+  color: #72808e;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+select:hover {
+  color: #0589ff;
+}
+
+.mat-list-single-selected-option,
+.mat-list-single-selected-option:hover,
+.mat-list-single-selected-option:focus {
+  background-color: #dcdcdc;
+}
+
+.mat-list-item-content {
+  padding: 0;
+}
+
+.mat-list-item-content,
+.mat-list-item-content-reverse {
+  padding: 0 !important;
+}
+mat-list-option {
+  height: 65px !important;
+}
+
+mat-button-toggle {
+  height: 60px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  mat-icon {
+    padding: 0 !important;
+  }
+}
+.panel {
+  max-width: 100%;
+  height: auto;
+}

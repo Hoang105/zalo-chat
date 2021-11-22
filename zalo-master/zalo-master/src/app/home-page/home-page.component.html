@@ -1,0 +1,92 @@
+<div fxLayout="row" fxLayoutAlign="space-between stretch" fxFill>
+  <div fxFlex="5 0 5" class="toolbar">
+    <mat-button-toggle-group
+      fxLayout="column"
+      fxFill
+      appearance="legacy"
+      name="fontStyle"
+      aria-label="Font Style"
+    >
+      <mat-card class="avatar" [matMenuTriggerFor]="menu">
+        <img [src]="avatarUrl" alt="avt" mat-card-avatar />
+      </mat-card>
+      <!-- menu -->
+      <mat-menu #menu="matMenu" xPosition="after">
+        <button mat-menu-item (click)="openDialog()">
+          <mat-icon>create</mat-icon>
+          <span>Cập nhật thông tin</span>
+        </button>
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Đăng xuất tài khoản</span>
+        </button>
+      </mat-menu>
+
+      <mat-button-toggle value="chat" (click)="goToChat()">
+        <mat-icon>message</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="list-contacts" (click)="goToContact()">
+        <mat-icon
+          [matBadge]="notifyFriend"
+          matBadgeColor="warn"
+          [matBadgeHidden]="true"
+          >contacts</mat-icon
+        >
+      </mat-button-toggle>
+      <mat-button-toggle value="list-contacts" (click)="goToAddFriend()">
+        <mat-icon
+          [matBadge]="notifyInvitations"
+          matBadgeColor="warn"
+          [matBadgeHidden]="notifyInvitations > 0 ? false : true"
+          >person_add</mat-icon
+        >
+      </mat-button-toggle>
+      <span class="spacer"></span>
+      <mat-button-toggle value="settings">
+        <mat-icon>settings</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div fxFlex="25 1 25" style="height: 100%" class="list-chat">
+    <div style="border-bottom: 1px solid #e8eaed">
+      <h3>
+        <span>Zalo - </span> <span>{{ userName }}</span>
+      </h3>
+      <mat-divider></mat-divider>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="openFindFriendDialog()">
+          <mat-icon>person_search</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>add_comment</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div [ngSwitch]="currentComponent">
+      <div *ngSwitchCase="'chat'">
+        <app-list-item-chat></app-list-item-chat>
+      </div>
+      <div *ngSwitchCase="'contact'">
+        <app-list-item-contact (emitItemBoxChat)="getBoxChat($event)"></app-list-item-contact>
+      </div>
+      <div *ngSwitchCase="'invitations'">
+        <app-list-item-invitations></app-list-item-invitations>
+      </div>
+    </div>
+  </div>
+
+  <div fxFlex="70 3 70" class="content-chat">
+    <app-content-chat *ngIf="isShowContentChat"></app-content-chat>
+
+    <div
+      *ngIf="!isShowContentChat"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      fxFill
+      style="background-color: white"
+    >
+      <img class="panel" src="../../assets/zalo.png" alt="panel" />
+    </div>
+  </div>
+</div>

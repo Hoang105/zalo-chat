@@ -1,0 +1,32 @@
+<h1 mat-dialog-title style="text-align: center;">Thông tin người dùng</h1>
+<!-- <div mat-dialog-content>This dialog showcases the title, close, content and actions elements.</div> -->
+<!-- <h1>{{tesst}}</h1> -->
+<br>
+<div style="text-align: center;"> 
+  <mat-form-field appearance="fill" style="width: 80%;">
+    <mat-label>Name</mat-label>
+    <input type="text" [(ngModel)]="data.dataUser.username" matInput>    
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill" style="width: 80%;">
+    <mat-label>Giới tính</mat-label>
+    <mat-select [(ngModel)]="data.dataUser.gender" >
+      <mat-option value="Nam">Nam</mat-option>
+      <mat-option value="Nu">Nữ</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+
+  <mat-form-field appearance="fill" style="width: 80%;">
+    <mat-label>Ngày sinh</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data.dataUser.birthday">
+    <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+    <mat-datepicker [startAt]="data.dataUser.birthday" #picker></mat-datepicker>
+  </mat-form-field>
+</div>
+
+
+<div mat-dialog-actions style="float: right;">
+  <button mat-button (click)="updateInfo()">Cập nhật</button>
+  <button mat-button mat-dialog-close>Đóng</button>
+</div>

@@ -1,0 +1,79 @@
+.aside-chat {
+  background-color: tomato;
+  border-left: 1px solid #e8eaed;
+}
+.aside-file {
+  background-color: whitesmoke;
+  border-left: 1px solid #e8eaed;
+}
+.title-chat {
+  background-color: whitesmoke;
+}
+.content-chat {
+  background-image: linear-gradient(
+    to right top,
+    #96aac8,
+    #82a6b4,
+    #7f9e9d,
+    #84948b,
+    #868981
+  );
+}
+.input-chat {
+  background-color: whitesmoke;
+}
+mat-card {
+  background-color: transparent;
+  mat-card-title {
+    color: black;
+  }
+  mat-card-subtitle {
+    color: #72808e;
+  }
+}
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: none !important;
+}
+.message {
+  outline: none;
+  border: none;
+}
+.chat-info {
+  border-bottom: 1px solid #e8eaed;
+}
+
+.avtchat {
+  img {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+  }
+}
+.infochat {
+  background-color: #e8eaed;
+  border-radius: 10px;
+  padding: 8px;
+  min-width: 100px;
+  p {
+    font-size: 10px;
+    padding: 0;
+    margin: 0;
+  }
+  div {
+    font-size: 18px;
+  }
+}
+.me {
+  padding-top: 10px;
+  padding-left: 5px;
+}
+.you {
+  padding-top: 10px;
+  padding-right: 5px;
+}
+.youchat {
+  background-color: #dae9ff;
+}
+::-webkit-scrollbar {
+  display: none;
+}

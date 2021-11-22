@@ -1,0 +1,17 @@
+<div>
+  <mat-selection-list [multiple]="false" [(ngModel)]="selectedOptions">
+    <mat-list-option
+      fxLayout="column"
+      *ngFor="let item of listinvitions"
+      [value]="item"
+      (click)="showinfo()"
+    >
+      <mat-card class="item-chat">
+        <mat-card-header>
+          <img [src]="item.imgurl" alt="avt" mat-card-avatar />
+          <mat-card-title>{{ item.username }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-list-option>
+  </mat-selection-list>
+</div>

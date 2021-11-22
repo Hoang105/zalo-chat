@@ -1,0 +1,152 @@
+<div fxLayout="row" fxLayoutAlign="space-between" fxFill>
+  <div
+    fxFlex="70"
+    fxLayout="column"
+    fxLayoutAlign="space-between stretch"
+    class="aside-chat"
+  >
+    <!-- tên người chat, nhóm chatchat -->
+    <div
+      class="title-chat"
+      fxFlex="13"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <mat-card>
+        <mat-card-header>
+          <img [src]="roomChat?.roomImage" alt="avt" mat-card-avatar />
+          <mat-card-title>{{ roomChat?.roomName }}</mat-card-title>
+          <mat-card-subtitle>{{ lastTimeConnect }}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+      <button mat-icon-button fxFlexAlign="end">
+        <mat-icon
+          style="color: black; font-size: 30px !important; padding-right: 10px"
+          >group_add</mat-icon
+        >
+      </button>
+    </div>
+
+    <!-- nội dung đoạn chatchat -->
+    <div class="content-chat" fxFlex="75">
+      <div
+        fxLayoutGap="10px grid"
+        fxFlex="row"
+        fxLayout="column-reverse"
+        #scrollContentChat
+        style="overflow: auto; scrollbar-width: 0px; height: 100%"
+      >
+        <div *ngFor="let mess of listConversation">
+          <div [ngSwitch]="mess.owner">
+            <div
+              *ngSwitchCase="userid"
+              fxLayout="row"
+              fxLayoutAlign="end start"
+              style="padding-right: 20px"
+            >
+              <div class="infochat mechat">
+                <div style="padding-right: 4px">
+                  <p *ngIf="roomChat.roomType === 'two'">
+                    {{ getUserName(mess.owner) }}
+                  </p>
+                  <div>{{ mess.message }}</div>
+                  <p>{{ mess.time | date: "hh:mm" }}</p>
+                </div>
+              </div>
+              <div class="avtchat me">
+                <img [src]="getImage(mess.owner)" alt="avt" />
+              </div>
+            </div>
+            <div
+              *ngSwitchDefault
+              fxLayout="row"
+              fxLayoutAlign="start start"
+              style="padding-left: 20px"
+            >
+              <div class="avtchat you">
+                <img [src]="getImage(mess.owner)" alt="avt" />
+              </div>
+              <div class="infochat youchat">
+                <div style="padding-left: 4px">
+                  <p *ngIf="roomChat.roomType === 'two'">
+                    {{ getUserName(mess.owner) }}
+                  </p>
+                  <div>{{ mess.message }}</div>
+                  <p>{{ mess.time | date: "hh:mm" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- nhập nội dung chatchat -->
+    <div class="input-chat" fxFlex="12">
+      <div>
+        <button mat-icon-button fxFlexAlign="end">
+          <mat-icon style="color: #72808e">mood</mat-icon>
+        </button>
+        <button mat-icon-button fxFlexAlign="end">
+          <mat-icon style="color: #72808e">attach_file</mat-icon>
+        </button>
+        <button mat-icon-button fxFlexAlign="end">
+          <mat-icon style="color: #72808e">photo</mat-icon>
+        </button>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between stretch"
+        style="background-color: white"
+      >
+        <input
+          placeholder="Nhập tin nhắn mới"
+          class="message"
+          type="text"
+          style="line-height: 24px; width: 100%"
+          #message
+          (keyup.enter)="sendMessage(message.value); message.value = ''"
+          (blur)="sendMessage(message.value); message.value = ''"
+        />
+        <button
+          mat-icon-button
+          fxFlexAlign="end"
+          (click)="sendMessage(message.value)"
+        >
+          <mat-icon style="color: #72808e">send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- chứa dữa liệu hình ảnh trong đoạn chat -->
+  <div
+    fxFlex="30"
+    class="aside-file"
+    fxLayout="column"
+    fxLayoutAlign="space-between center"
+  >
+    <div class="chat-info" fxFlex="13" fxFill>
+      <h3 style="text-align: center; margin-top: 20px">THÔNG TIN HỘI THOẠI</h3>
+    </div>
+    <div
+      fxFlex="87"
+      fxFill
+      fxLayoutGap="20px"
+      fxLayout="column"
+      fxLayoutAlign="space-between center"
+      style="background-color: #ededed"
+    >
+      <div fxFlex="50" fxFill style="background-color: whitesmoke">
+        <button mat-icon-button fxFlexAlign="end">
+          <mat-icon style="color: #72808e">photo</mat-icon>
+          <span>Ảnh</span>
+        </button>
+      </div>
+      <div fxFlex="50" fxFill style="background-color: whitesmoke">
+        <button mat-icon-button fxFlexAlign="end">
+          <mat-icon style="color: #72808e">attach_file</mat-icon>
+          <span>File</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

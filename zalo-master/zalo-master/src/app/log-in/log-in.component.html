@@ -1,0 +1,24 @@
+<div class="containerr" fxLayout="row" fxLayoutAlign="space-around center">
+    <mat-card fxFlexAlign="center" style="width: 20%;">
+        <div div fxLayout="column" fxLayoutAlign="space-around stretch" (keyup.enter)="login()">
+            <mat-card-title>Đăng Nhập</mat-card-title><br>
+            <mat-form-field appearance="fill">
+                <mat-label>Tài khoản</mat-label>
+                <input matInput type="text" [(ngModel)]="loginModel.id">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Mật khẩu</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="loginModel.password">
+                <button mat-icon-button matSuffix (click)="hidefc()" [disabled]="disable" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <p style="margin-bottom: 15px;">Bạn chưa có tài khoản? <a  routerLink="/register" routerLinkActive="active">Đăng ký ngay</a></p>
+            <button mat-raised-button (click)="login()">Đăng nhập</button>
+        <!-- <p><a href="#">Quên mật khẩu</a></p> -->
+        </div>
+
+    </mat-card>
+
+</div>

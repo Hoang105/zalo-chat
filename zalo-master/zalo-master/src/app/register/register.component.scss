@@ -1,0 +1,27 @@
+mat-card-title{
+    margin-top: 10px;
+    text-align: center;
+}
+mat-ink-bar {
+    background-color: #133a62 !important;
+}
+.containerr{
+    height: 100%; 
+    background-image: linear-gradient(to right bottom, #051937, #133a62, #1b5f8f, #1c87bd, #12b2eb);
+}
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #133a62 !important;
+}
+::ng-deep .mat-focused .mat-form-field-underline .mat-form-field-ripple{
+    background-color:#133a62!important;
+}
+p{
+    margin: 0;
+    padding-top: 15px;
+    text-align: right;
+}
+a{
+    color: white;
+    font-size: 11px;
+    margin: 0;
+}

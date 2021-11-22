@@ -1,0 +1,23 @@
+mat-card-title{
+    text-align: center;
+}
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #133a62 !important;
+}
+::ng-deep .mat-focused .mat-form-field-underline .mat-form-field-ripple{
+    background-color:#133a62!important;
+}
+.containerr{
+    height: 100%; 
+    background-image: linear-gradient(to right bottom, #051937, #133a62, #1b5f8f, #1c87bd, #12b2eb);
+}
+p{
+    margin: 0;
+    font-size: 12px;
+    text-align: right;
+}
+a{
+    color: white;
+    font-size: 12px;
+    margin: 0;
+}

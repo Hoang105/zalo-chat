@@ -1,0 +1,55 @@
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: none !important;
+}
+// .avatar {
+//   background-color: transparent;
+//   padding-top: 22px;
+//   padding-bottom: 22px;
+// }
+mat-select-value {
+  color: black;
+}
+select {
+  font-size: 15px;
+  margin: 5px 15px 5px 0px;
+  color: #72808e;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+select:hover {
+  color: #0589ff;
+}
+
+.mat-list-single-selected-option,
+.mat-list-single-selected-option:hover,
+.mat-list-single-selected-option:focus {
+  background-color: #dcdcdc;
+}
+
+.mat-list-item-content {
+  padding: 0;
+}
+
+.mat-list-item-content,
+.mat-list-item-content-reverse {
+  padding: 0 !important;
+}
+mat-list-option {
+  height: 65px !important;
+}
+
+.item-chat {
+  background-color: transparent;
+  padding-left: 10px !important;
+  mat-card-title {
+    color: black;
+  }
+  mat-card-subtitle {
+    color: #72808e;
+    margin-bottom: 0;
+  }
+}
+.mat-card:not([class*="mat-elevation-z"]) {
+  box-shadow: none !important;
+}

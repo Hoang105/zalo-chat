@@ -1,0 +1,39 @@
+<div style="height: 100%">
+  <mat-selection-list
+    style="overflow: auto"
+    [multiple]="false"
+    [(ngModel)]="selectedOptions"
+  >
+    <mat-list-option
+      *ngFor="let item of listFriend"
+      fxLayout="column"
+      [value]="item"
+    >
+      <mat-card
+        class="item-chat"
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+      >
+        <mat-card-header>
+          <img [src]="item.imgurl" alt="avt" mat-card-avatar />
+          <div class="img-user"></div>
+          <mat-card-title>{{ item.username }}</mat-card-title>
+        </mat-card-header>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon style="color: black">more_horiz</mat-icon>
+        </button>
+      </mat-card>
+      <mat-menu #menu="matMenu" xPosition="after">
+        <button mat-menu-item  (click)="goToChat(item)">
+          <mat-icon>inbox</mat-icon>
+          <span>Inbox</span>
+        </button>
+        <button mat-menu-item (click)="deletefriend()">
+          <mat-icon>delete</mat-icon>
+          <span>Xóa bạn</span>
+        </button>
+      </mat-menu>
+      <mat-divider></mat-divider>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
