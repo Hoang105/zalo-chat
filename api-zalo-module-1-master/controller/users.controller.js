@@ -1,6 +1,7 @@
 const AWS = require("../share/connect");
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-2" });
+const code = "abc@123";
 
 module.exports.getUser = (req, res) => {
   id = req.params.userid;
@@ -48,6 +49,9 @@ module.exports.updateInfo = (req, res) => {
 };
 module.exports.register = (req, res) => {
   const { id, password, birthday, gender, username } = req.body;
+  const newPassword = password + code;
+  var crypto = require("crypto-js");
+  var hash = crypto.AES.encrypt(newPassword, code).toString();
   const promise = new Promise(function (resolve, reject) {
     var params1 = {
       TableName: "user-zalo",
@@ -74,7 +78,7 @@ module.exports.register = (req, res) => {
         TableName: "user-zalo",
         Item: {
           userid: id,
-          password: password,
+          password: hash,
           birthday: birthday,
           gender: gender,
           username: username,
@@ -88,7 +92,7 @@ module.exports.register = (req, res) => {
           res.json({
             Item: {
               id: id,
-              password: password,
+              // password: hash,
               birthday: birthday,
               gender: gender,
               username: username,

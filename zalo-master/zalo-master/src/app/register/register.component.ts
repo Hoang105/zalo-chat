@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
   isLinear = true;
   isOptional = false;
   hide = true;
-  registerbyemail = true;
+  registerbyemail = false;
   rgxemail = '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$';
   rgxphone = '^(03|07|08|09|01[2|6|8|9])+([0-9]{8})$';
 
@@ -51,11 +51,6 @@ export class RegisterComponent implements OnInit {
       gender: ['', Validators.required],
       // verificationCode: ['', Validators.required],
     });
-  }
-
-  onValChange(value: any) {
-    this.registerbyemail = !this.registerbyemail;
-    this.stepper.reset();
   }
 
   async register() {

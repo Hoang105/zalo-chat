@@ -1,7 +1,7 @@
 const AWS = require("../share/connect");
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-2" });
-
+const code = "abc@123";
 module.exports.login = (req, res) => {
   const { id, password } = req.body;
   console.log(req.body);
@@ -16,7 +16,10 @@ module.exports.login = (req, res) => {
       res.status(200).json({ err: err });
     } else {
       if (!isEmpty(data)) {
-        if (data.Item.password === password) res.json(data);
+        var crypto = require("crypto-js");
+        var hash = crypto.AES.decrypt(data.Item.password, code);
+        var hashPassword = hash.toString(crypto.enc.Utf8);
+        if (hashPassword === password + code) res.json(data);
         else res.status(200).json({ err: "Sai tài khoản hoặc mật khẩu" });
       } else {
         res.status(200).json({ err: "Sai tài khoản hoặc mật khẩu" });
