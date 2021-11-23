@@ -62,3 +62,28 @@ function getRomChatF(id) {
     });
   });
 }
+//get message from box chat
+// module.exports.getMessageFromRoomChat = (req, res) => {
+//   const { roomId, type } = req.body;
+//   var params = {
+//     TableName: "chat",
+//     KeyConditionExpression: "#pk = :romid and begins_with( #sk,:chat)",
+//     ScanIndexForward: false,
+//     ExpressionAttributeNames: {
+//       "#pk": "PK",
+//       "#sk": "SK",
+//     },
+//     ExpressionAttributeValues: {
+//       ":romid": roomid,
+//       ":chat": type,
+//     },
+//   };
+//   docClient.query(params, function (err, data) {
+//     if (err) {
+//       res.send(err);
+//     } else {
+//       console.log(data.Items);
+//       res.json(data);
+//     }
+//   });
+// };

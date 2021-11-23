@@ -59,14 +59,14 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
 
   getImage(owner) {
     let user = this.roomChat.roomMember.find((x) => x.userid === owner);
-    return user.imgurl;
+    // return user.imgurl;
   }
   getUserName(owner) {
     let user = this.roomChat.roomMember.find((x) => x.userid === owner);
-    return user.username;
+    // return user.username;
   }
 
-  sendMessage(message: string) {
+  async sendMessage(message: string) {
     const member = this.roomChat.roomMember.map((x) => x.userId);
     if (message.length > 0) {
       let mess = new ChatModel(
@@ -78,7 +78,15 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
         message
       );
       this.notifyService.sendMessage(mess);
-      this.chatService.putMessage(mess).then((value) => console.log(value));
+      const data = await this.chatService.putMessage(mess);
+      console.log(data);
+      if (data.message === 'Đã nhận') {
+        this.chatService
+          .getMessageFromRoom({ roomid: this.roomChat.roomId })
+          .then((updateChat) => {
+            this.dbLocalService.changeListMessage(updateChat.Items);
+          });
+      }
     }
   }
   scrollToBottom(): void {

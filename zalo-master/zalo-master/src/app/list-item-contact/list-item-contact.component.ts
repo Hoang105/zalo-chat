@@ -70,7 +70,7 @@ export class ListItemContactComponent implements OnInit {
     const userId = this.storageService.get('userId');
     const userName = this.storageService.get('userName');
     const modal = {
-      roomId: userId,
+      userId: userId,
       roomName: `${item.username}`,
       roomImage: '../../assets/shiba1.jpg',
       roomNotify: '0',

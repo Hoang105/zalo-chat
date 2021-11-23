@@ -40,21 +40,17 @@ module.exports.getRomChat = async (req, res) => {
   }
 };
 module.exports.getMessageFromRoom = (req, res) => {
-  const { roomid, type } = req.body;
-  console.log(roomid);
-  console.log(type);
+  const { roomid } = req.body;
   var params = {
     TableName: "chat",
-    KeyConditionExpression: "#pk = :romid and begins_with( #sk,:chat)",
+    KeyConditionExpression: "#pk = :roomid",
     ScanIndexForward: false,
     Limit: 100,
     ExpressionAttributeNames: {
       "#pk": "PK",
-      "#sk": "SK",
     },
     ExpressionAttributeValues: {
-      ":romid": roomid,
-      ":chat": type,
+      ":roomid": roomid,
     },
   };
   docClient.query(params, function (err, data) {
@@ -67,6 +63,7 @@ module.exports.getMessageFromRoom = (req, res) => {
   });
 };
 
+//PK roomId
 module.exports.putMessage = (req, res) => {
   const { PK, SK, owner, time, member, message } = req.body;
   const params = {
@@ -118,23 +115,18 @@ function getValueByPkSk(pk, sk) {
 }
 
 module.exports.getRoomChat = (req, res) => {
-  const { userid } = req.body;
+  const { userId } = req.body;
   var params = {
     TableName: "room-chat",
-    KeyConditionExpression: "#pk = :userid and begins_with( #sk,:room)",
+    FilterExpression: "userId = :userId",
     ScanIndexForward: false,
-    Limit: 100,
-    ExpressionAttributeNames: {
-      "#pk": "PK",
-      "#sk": "SK",
-    },
+    Limit: 500,
     ExpressionAttributeValues: {
-      ":userid": userid,
-      ":room": "room",
+      ":userId": userId,
     },
   };
 
-  docClient.query(params, function (err, data) {
+  docClient.scan(params, function (err, data) {
     if (err) {
       res.send(err);
     } else {
@@ -170,19 +162,24 @@ module.exports.getMemberInRoom = (req, res) => {
 //create new room from user
 module.exports.createNewRoomChat = (req, res) => {
   const {
-    roomId,
+    userId,
     roomName,
     roomImage,
     roomNotify,
     roomConversations,
     roomMember,
   } = req.body;
+  var uuid = require("uuid");
+  const pk = uuid.v1();
+  const sk = uuid.v4();
+
   var params2 = {
     TableName: "room-chat",
     Item: {
-      PK: roomId,
-      SK: roomId,
-      roomId: roomId,
+      PK: pk,
+      SK: sk,
+      roomId: pk,
+      userId: userId,
       roomImage: roomImage,
       roomNotify: roomNotify,
       roomConversations: roomConversations,
@@ -195,9 +192,10 @@ module.exports.createNewRoomChat = (req, res) => {
       res.status(200).send(err);
     } else {
       res.json({
-        PK: roomId,
-        SK: roomId,
-        roomId: roomId,
+        PK: pk,
+        SK: sk,
+        roomId: pk,
+        userId: userId,
         roomImage: roomImage,
         roomNotify: roomNotify,
         roomConversations: roomConversations,

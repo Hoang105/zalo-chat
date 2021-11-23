@@ -14,7 +14,7 @@ export class DataChatService {
   public room = new BehaviorSubject<any>('default');
   public currentRoom = this.room.asObservable();
 
-  private listRoomChat = new BehaviorSubject<any>([]);
+  public listRoomChat = new BehaviorSubject<any>([]);
   public currentListRoomChat = this.listRoomChat.asObservable();
 
   private isShowContentChat = new BehaviorSubject<boolean>(false);

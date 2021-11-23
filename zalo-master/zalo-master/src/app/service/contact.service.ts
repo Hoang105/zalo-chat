@@ -1,6 +1,7 @@
 import { Url } from './../shared/url';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface UserId {
   id: string;
@@ -64,5 +65,8 @@ export class ContactService {
     return await this.http
       .post(this.urlChat + '/api/createNewRoomChat', model)
       .toPromise();
+  }
+  getRoomChatUserId(model: any): Observable<any> {
+    return this.http.post(this.urlChat + '/api/getRoomChat', model);
   }
 }
