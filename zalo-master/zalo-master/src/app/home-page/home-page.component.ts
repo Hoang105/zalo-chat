@@ -1,4 +1,4 @@
-import { throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { UserModel } from './../shared/model/user.model';
 import { DbLocalService } from './../shared/data/db.service';
 import { DataChatService } from './../shared/data/data-chat.service';
@@ -9,7 +9,7 @@ import { DataFriendsService } from './../shared/data/data-friends.service';
 import { DialogFindfriendComponent } from './../dialog-findfriend/dialog-findfriend.component';
 
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUpdateComponent } from '../dialog-update/dialog-update.component';
 import { StorageService } from '../service/storage.service';
@@ -19,13 +19,15 @@ import { NotifyService } from './../service/notify.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageModel } from '../shared/model/message.model';
 import { RoomModel } from '../shared/model/room.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnDestroy, OnInit {
+  private ngUnsubscribe = new Subject();
   constructor(
     private router: Router,
     public dialog: MatDialog,
@@ -153,6 +155,15 @@ export class HomePageComponent implements OnInit {
     this.notifyService.listenDelete().subscribe(() => {
       this.preLoadContact();
     });
+    const userNameModal = {
+      userId: this.userId,
+    };
+    this.contactServiec
+      .getRoomChatUserId(userNameModal)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        this.dataChatService.listRoomChat.next(data.Items);
+      });
   }
 
   async preLoadContact() {
@@ -226,5 +237,9 @@ export class HomePageComponent implements OnInit {
     this.dbLocal.UserObject = {};
     this.dataChatService.changeListRoom([]);
     this.router.navigate(['./login']);
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
