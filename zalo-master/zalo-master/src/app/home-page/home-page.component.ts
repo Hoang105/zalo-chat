@@ -229,7 +229,6 @@ export class HomePageComponent implements OnDestroy, OnInit {
   async getBoxChat(itemBoxChat) {
     this.isShowContentChat = true;
     const listBoxChat = this.chatService.getListRoom(itemBoxChat);
-    console.log(listBoxChat);
   }
   logOut() {
     this.storageService.removeAll();
