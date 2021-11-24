@@ -118,7 +118,7 @@ module.exports.getRoomChat = (req, res) => {
   const { userId } = req.body;
   var params = {
     TableName: "room-chat",
-    FilterExpression: "userId = :userId",
+    FilterExpression: "contains(roomMember, :userId )",
     ScanIndexForward: false,
     Limit: 500,
     ExpressionAttributeValues: {
@@ -172,7 +172,6 @@ module.exports.createNewRoomChat = (req, res) => {
   var uuid = require("uuid");
   const pk = uuid.v1();
   const sk = uuid.v4();
-
   var params2 = {
     TableName: "room-chat",
     Item: {
@@ -184,7 +183,7 @@ module.exports.createNewRoomChat = (req, res) => {
       roomNotify: roomNotify,
       roomConversations: roomConversations,
       roomName: roomName,
-      roomMember: roomMember,
+      roomMember: docClient.createSet(roomMember),
     },
   };
   docClient.put(params2, function (err, data) {

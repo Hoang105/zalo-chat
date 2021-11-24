@@ -69,27 +69,37 @@ export class ListItemContactComponent implements OnInit {
     this.emitItemBoxChat.emit(item);
     const userId = this.storageService.get('userId');
     const userName = this.storageService.get('userName');
+
     const modal = {
       userId: userId,
       roomName: `${item.username}`,
       roomImage: '../../assets/shiba1.jpg',
       roomNotify: '0',
       roomConversations: [],
-      roomMember: [
-        {
-          userId: userId,
-          userName: userName,
-          Role: Role.leader,
-        },
-        {
-          userId: item.userid,
-          userName: item.username,
-          Role: Role.member,
-        },
-      ],
+      roomMember: [userId, item.userid],
     };
-    const data = await this.contactServiec.createRoomChat(modal);
-    this.dataChatService.room.next(data);
+    const rooms = this.dataChatService.listRoomChat.getValue();
+    let isRoomExist;
+    let dataRoom;
+    rooms.forEach((room) => {
+      if (
+        (room.roomMember[0] === modal.roomMember[0] &&
+          room.roomMember[1] === modal.roomMember[1]) ||
+        (room.roomMember[0] === modal.roomMember[1] &&
+          room.roomMember[1] === modal.roomMember[0])
+      ) {
+        isRoomExist = true;
+        dataRoom = room;
+      } else {
+        isRoomExist = false;
+      }
+    });
+    if (!isRoomExist) {
+      const data = await this.contactServiec.createRoomChat(modal);
+      this.dataChatService.room.next(data);
+    } else {
+      this.dataChatService.room.next(dataRoom);
+    }
   }
 
   // notification delete, should put another file

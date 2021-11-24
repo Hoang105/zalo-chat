@@ -28,6 +28,7 @@ export class NotifyService {
   sendAccept(id: string, model: any) {
     this.socket.emit('sendaccept', { id, model });
   }
+
   listenAccept() {
     return new Observable((observer) => {
       this.socket.on('accept', (obj) => {
@@ -51,6 +52,7 @@ export class NotifyService {
       });
     });
   }
+
   joinRom(id) {
     this.socket.emit('joinroom', { id: id });
   }

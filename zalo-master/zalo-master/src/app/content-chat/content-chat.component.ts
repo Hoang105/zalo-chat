@@ -86,6 +86,7 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
           .then((updateChat) => {
             this.dbLocalService.changeListMessage(updateChat.Items);
           });
+        this.notifyService.sendMessage(message);
       }
     }
   }
