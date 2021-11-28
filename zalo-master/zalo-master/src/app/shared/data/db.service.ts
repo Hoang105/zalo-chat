@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DbLocalService {
   listRoom: any[] = [];
-  private listMessage = new BehaviorSubject<any>([]);
+  public listMessage = new BehaviorSubject<any>([]);
   public currentListMessage = this.listMessage.asObservable();
 
   RoomObject = {};

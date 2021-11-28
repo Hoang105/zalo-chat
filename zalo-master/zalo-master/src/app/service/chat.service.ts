@@ -36,6 +36,7 @@ export class ChatService {
       .post<any>(this.url + '/api/getMessageFromRoom', model)
       .toPromise();
   }
+
   async putMessage(model: any): Promise<any> {
     return this.http.post<any>(this.url + '/api/putMessage', model).toPromise();
   }

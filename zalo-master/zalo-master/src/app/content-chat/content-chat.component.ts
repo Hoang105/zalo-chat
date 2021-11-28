@@ -1,7 +1,7 @@
 import { RoomModel } from './../shared/model/room.model';
 import { DbLocalService } from './../shared/data/db.service';
 import { DataFriendsService } from './../shared/data/data-friends.service';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { NotifyService } from './../service/notify.service';
 import { UserId } from './../service/contact.service';
 import { StorageService } from './../service/storage.service';
@@ -15,14 +15,18 @@ import {
   ElementRef,
   ViewChild,
   Input,
+  OnDestroy,
 } from '@angular/core';
+import { pipe, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-content-chat',
   templateUrl: './content-chat.component.html',
   styleUrls: ['./content-chat.component.scss'],
 })
-export class ContentChatComponent implements OnInit, AfterViewChecked {
+export class ContentChatComponent
+  implements OnInit, AfterViewChecked, OnDestroy
+{
   @ViewChild('scrollContentChat') private scrollContentChat: ElementRef;
   @Input() itemBoxChat: any;
   constructor(
@@ -33,6 +37,10 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
     private dataFriendsService: DataFriendsService,
     private dbLocalService: DbLocalService
   ) {}
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.unsubscribe();
+  }
   avatarUrl = this.storageService.get('avt');
   userid = this.storageService.get('userId');
   username = this.storageService.get('userName');
@@ -41,7 +49,7 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
   listConversation = [];
   messageChat: ChatModel;
   roomid = '';
-
+  private ngUnsubscribe = new Subject();
   ngOnInit(): void {
     this.dbLocalService.currentListMessage.subscribe((value) => {
       this.listConversation = value;
@@ -50,11 +58,14 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
       if (room != 'default') {
         this.roomChat = room;
         this.listConversation = room.roomConversations;
-        // if (this.listConversation.length === 0) {
-        //   this.
-        // }
       }
     });
+    this.notifyService
+      .listenMessage()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        this.dbLocalService.changeListMessage(data);
+      });
   }
 
   getImage(owner) {
@@ -67,7 +78,10 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
   }
 
   async sendMessage(message: string) {
-    const member = this.roomChat.roomMember.map((x) => x.userId);
+    const memberReceives = this.roomChat.roomMember.filter(
+      (member) => member != this.userid
+    );
+    const member = this.roomChat.roomMember;
     if (message.length > 0) {
       let mess = new ChatModel(
         this.roomChat.roomId,
@@ -77,17 +91,15 @@ export class ContentChatComponent implements OnInit, AfterViewChecked {
         member,
         message
       );
-      this.notifyService.sendMessage(mess);
-      const data = await this.chatService.putMessage(mess);
-      console.log(data);
-      if (data.message === 'Đã nhận') {
-        this.chatService
-          .getMessageFromRoom({ roomid: this.roomChat.roomId })
-          .then((updateChat) => {
-            this.dbLocalService.changeListMessage(updateChat.Items);
-          });
-        this.notifyService.sendMessage(message);
-      }
+      // this.notifyService.sendMessageReceive(this.userid, message);
+      const listMessage = this.dbLocalService.listMessage.getValue();
+      listMessage.unshift(mess);
+      // listMessage.shift();
+      this.dbLocalService.changeListMessage(listMessage);
+      memberReceives.forEach((idReceiver) => {
+        this.notifyService.sendMessage(idReceiver, listMessage);
+      });
+      this.chatService.putMessage(mess);
     }
   }
   scrollToBottom(): void {

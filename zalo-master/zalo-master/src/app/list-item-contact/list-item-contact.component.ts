@@ -77,29 +77,11 @@ export class ListItemContactComponent implements OnInit {
       roomNotify: '0',
       roomConversations: [],
       roomMember: [userId, item.userid],
+      friendId: item.userid,
+      isGroup: 0,
     };
-    const rooms = this.dataChatService.listRoomChat.getValue();
-    let isRoomExist;
-    let dataRoom;
-    rooms.forEach((room) => {
-      if (
-        (room.roomMember[0] === modal.roomMember[0] &&
-          room.roomMember[1] === modal.roomMember[1]) ||
-        (room.roomMember[0] === modal.roomMember[1] &&
-          room.roomMember[1] === modal.roomMember[0])
-      ) {
-        isRoomExist = true;
-        dataRoom = room;
-      } else {
-        isRoomExist = false;
-      }
-    });
-    if (!isRoomExist) {
-      const data = await this.contactServiec.createRoomChat(modal);
-      this.dataChatService.room.next(data);
-    } else {
-      this.dataChatService.room.next(dataRoom);
-    }
+    const data = await this.contactServiec.createRoomChat(modal);
+    this.dataChatService.room.next(data);
   }
 
   // notification delete, should put another file

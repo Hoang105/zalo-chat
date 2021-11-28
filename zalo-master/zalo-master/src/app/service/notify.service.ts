@@ -57,13 +57,25 @@ export class NotifyService {
     this.socket.emit('joinroom', { id: id });
   }
 
-  sendMessage(message: any) {
-    this.socket.emit('sendmessage', { message });
+  sendMessage(id: string, data: any) {
+    this.socket.emit('sendmessage', { id, data });
   }
 
   listenMessage() {
     return new Observable((observer) => {
       this.socket.on('getmessage', (obj) => {
+        observer.next(obj);
+      });
+    });
+  }
+
+  sendMessageReceive(idSender, message) {
+    this.socket.emit(`get123`, message);
+  }
+
+  listenMessageReceive(userId) {
+    return new Observable((observer) => {
+      this.socket.on(`get123`, (obj) => {
         observer.next(obj);
       });
     });
