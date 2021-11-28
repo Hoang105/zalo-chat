@@ -1,5 +1,6 @@
 const AWS = require("../share/connect");
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-2" });
+const io = require("../share/socket");
 
 module.exports.getRomChat = async (req, res) => {
   const { id } = req.body;
@@ -74,13 +75,34 @@ module.exports.putMessage = (req, res) => {
       SK: SK,
       owner: owner,
       time: time,
-      member: member,
+      roomMember: member,
       message: message,
     },
   };
   docClient.put(params, function (err, data) {
     if (err) res.send(err);
-    else res.json({ message: "Đã nhận" });
+    else {
+      var params = {
+        TableName: "chat",
+        KeyConditionExpression: "#pk = :PK",
+        ScanIndexForward: false,
+        Limit: 100,
+        ExpressionAttributeNames: {
+          "#pk": "PK",
+        },
+        ExpressionAttributeValues: {
+          ":PK": PK,
+        },
+      };
+      docClient.query(params, function (err, data) {
+        if (err) {
+          res.send(err);
+        } else {
+          io.emit(`get123`, message);
+          res.json(data.Items);
+        }
+      });
+    }
   });
 };
 
@@ -168,39 +190,64 @@ module.exports.createNewRoomChat = (req, res) => {
     roomNotify,
     roomConversations,
     roomMember,
+    friendId,
+    isGroup,
   } = req.body;
-  var uuid = require("uuid");
-  const pk = uuid.v1();
-  const sk = uuid.v4();
-  var params2 = {
+  var params = {
     TableName: "room-chat",
-    Item: {
-      PK: pk,
-      SK: sk,
-      roomId: pk,
-      userId: userId,
-      roomImage: roomImage,
-      roomNotify: roomNotify,
-      roomConversations: roomConversations,
-      roomName: roomName,
-      roomMember: docClient.createSet(roomMember),
+    FilterExpression:
+      "contains(roomMember, :userId ) and contains(roomMember, :friendId )",
+    ScanIndexForward: false,
+    Limit: 500,
+    ExpressionAttributeValues: {
+      ":userId": userId,
+      ":friendId": friendId,
     },
   };
-  docClient.put(params2, function (err, data) {
+
+  docClient.scan(params, function (err, data) {
     if (err) {
-      res.status(200).send(err);
+      res.send(err);
     } else {
-      res.json({
-        PK: pk,
-        SK: sk,
-        roomId: pk,
-        userId: userId,
-        roomImage: roomImage,
-        roomNotify: roomNotify,
-        roomConversations: roomConversations,
-        roomName: roomName,
-        roomMember: roomMember,
-      });
+      if (data.Items.length === 0) {
+        var uuid = require("uuid");
+        const pk = uuid.v1();
+        const sk = uuid.v4();
+        var params2 = {
+          TableName: "room-chat",
+          Item: {
+            PK: pk,
+            SK: sk,
+            roomId: pk,
+            userId: userId,
+            roomImage: roomImage,
+            roomNotify: roomNotify,
+            roomConversations: roomConversations,
+            roomName: roomName,
+            roomMember: docClient.createSet(roomMember),
+          },
+        };
+        docClient.put(params2, function (err, data) {
+          if (err) {
+            res.status(200).send(err);
+          } else {
+            res.json({
+              PK: pk,
+              SK: sk,
+              roomId: pk,
+              userId: userId,
+              roomImage: roomImage,
+              roomNotify: roomNotify,
+              roomConversations: roomConversations,
+              roomName: roomName,
+              roomMember: roomMember,
+            });
+          }
+        });
+      } else {
+        res.json(data.Items[0]);
+      }
     }
   });
 };
+function checkRoom(userId, friendId) {}

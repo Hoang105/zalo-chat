@@ -18,6 +18,7 @@ io.on("connection", (socket) => {
     socket.join(room.id);
     console.log(socket.adapter.rooms);
   });
+
   socket.on("userconnect", (data) => {
     io.to(data.id).emit("notify", data.model);
   });
@@ -37,9 +38,9 @@ io.on("connection", (socket) => {
   socket.on("joinroom", (data) => {
     socket.join(data.id);
   });
-  socket.on("sendmessage", (mess) => {
-    console.log(mess.message);
-    io.in(mess.message.PK).emit("getmessage", mess.message);
+
+  socket.on("sendmessage", (data) => {
+    io.to(data.id).emit("getmessage", data.data);
   });
 });
 app.use(cors());

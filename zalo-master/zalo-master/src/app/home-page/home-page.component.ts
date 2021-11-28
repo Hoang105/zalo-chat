@@ -1,4 +1,4 @@
-import { Subject, throwError } from 'rxjs';
+import { combineLatest, Subject, throwError } from 'rxjs';
 import { UserModel } from './../shared/model/user.model';
 import { DbLocalService } from './../shared/data/db.service';
 import { DataChatService } from './../shared/data/data-chat.service';
@@ -155,6 +155,18 @@ export class HomePageComponent implements OnDestroy, OnInit {
     this.notifyService.listenDelete().subscribe(() => {
       this.preLoadContact();
     });
+
+    this.notifyService.listenMessageReceive(this.userId).subscribe((data) => {
+      this.preLoadInvitation();
+    });
+
+    // this.notifyService
+    //   .listenMessage()
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe((data) => {
+    //     // debugger;
+    //   });
+
     const userNameModal = {
       userId: this.userId,
     };
