@@ -45,6 +45,7 @@ import { DialogAddFriendComponent } from './dialog-add-friend/dialog-add-friend.
 import { DialogFindfriendComponent } from './dialog-findfriend/dialog-findfriend.component';
 import { NotifyPanelComponent } from './notify-panel/notify-panel.component';
 import { DialogCreateGroupComponent } from './dialog-create-group/dialog-create-group.component';
+import { DialogListRoomMemberComponent } from './dialog-list-room-member/dialog-list-room-member.component';
 
 @NgModule({
   declarations: [
@@ -61,8 +62,9 @@ import { DialogCreateGroupComponent } from './dialog-create-group/dialog-create-
     DialogFindfriendComponent,
     NotifyPanelComponent,
     DialogCreateGroupComponent,
+    DialogListRoomMemberComponent,
   ],
-  entryComponents: [DialogCreateGroupComponent],
+  entryComponents: [DialogCreateGroupComponent, DialogListRoomMemberComponent],
   imports: [
     MatSnackBarModule,
     ScrollingModule,

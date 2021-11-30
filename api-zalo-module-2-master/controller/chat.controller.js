@@ -263,3 +263,29 @@ module.exports.createNewRoomChat = (req, res) => {
     }
   });
 };
+//edit room from user
+module.exports.EditRoom = (req, res) => {
+  const { pk, sk, idIsDeleted } = req.body;
+  let params = {
+    TableName: "room-chat",
+    Key: {
+      PK: pk,
+      SK: sk,
+    },
+    ExpressionAttributeValues: {
+      ":member": docClient.createSet([idIsDeleted]),
+    },
+    ExpressionAttributeNames: {
+      "#AtrToDelete": "roomMember",
+    },
+    UpdateExpression: "DELETE #AtrToDelete :member",
+  };
+  console.log(params);
+  docClient.update(params, (err, data) => {
+    if (err) {
+      res.status(200).send(err);
+    } else {
+      res.json({ message: "Xoa thanh cong" });
+    }
+  });
+};

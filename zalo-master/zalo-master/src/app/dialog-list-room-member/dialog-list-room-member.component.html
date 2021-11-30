@@ -1,0 +1,15 @@
+<div>
+  <div style="text-align: center">
+    <h1>Thông tin thành viên</h1>
+  </div>
+  <div>
+    <ng-container *ngFor="let item of listMember">
+      <div>
+        {{ item?.username
+        }}<button mat-icon-button (click)="deleteMember(item?.userid)">
+          Xoá
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

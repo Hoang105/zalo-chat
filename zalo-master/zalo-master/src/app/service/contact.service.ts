@@ -66,6 +66,11 @@ export class ContactService {
       .post(this.urlChat + '/api/createNewRoomChat', model)
       .toPromise();
   }
+  async editRoomChat(model: any): Promise<any> {
+    return await this.http
+      .post(this.urlChat + '/api/EditRoom', model)
+      .toPromise();
+  }
   getRoomChatUserId(model: any): Observable<any> {
     return this.http.post(this.urlChat + '/api/getRoomChat', model);
   }

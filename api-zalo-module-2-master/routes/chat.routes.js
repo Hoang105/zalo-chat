@@ -9,5 +9,5 @@ router.post("/putMessage", chatController.putMessage);
 router.post("/getRoomChat", chatController.getRoomChat);
 router.post("/getMemberInRoom", chatController.getMemberInRoom);
 router.post("/createNewRoomChat", chatController.createNewRoomChat);
-
+router.post("/EditRoom", chatController.EditRoom);
 module.exports = router;
