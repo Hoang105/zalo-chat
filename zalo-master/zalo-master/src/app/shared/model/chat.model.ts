@@ -9,7 +9,8 @@ export class ChatModel {
   avt: string;
   username: string;
   member: string[];
-  constructor(roomid, userId, username, avt, member, mess) {
+  image: string;
+  constructor(roomid, userId, username, avt, member, mess, image) {
     this.PK = roomid;
     this.owner = userId;
     this.message = mess;
@@ -18,5 +19,6 @@ export class ChatModel {
     this.username = username;
     this.avt = avt;
     this.member = member;
+    this.image = image;
   }
 }

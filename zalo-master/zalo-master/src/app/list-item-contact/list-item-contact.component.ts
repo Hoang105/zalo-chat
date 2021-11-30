@@ -79,9 +79,17 @@ export class ListItemContactComponent implements OnInit {
       roomMember: [userId, item.userid],
       friendId: item.userid,
       isGroup: 0,
+      leaderId: '',
+      deputyTeamId: '',
     };
     const data = await this.contactServiec.createRoomChat(modal);
     this.dataChatService.room.next(data);
+    const memberReceives = modal.roomMember.filter(
+      (member) => member !== userId
+    );
+    memberReceives.forEach((idReceiver) => {
+      this.notifyService.sendNewGroup(idReceiver);
+    });
   }
 
   // notification delete, should put another file

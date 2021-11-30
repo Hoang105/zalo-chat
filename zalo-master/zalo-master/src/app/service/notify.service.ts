@@ -80,4 +80,16 @@ export class NotifyService {
       });
     });
   }
+
+  sendNewGroup(idReceiver) {
+    this.socket.emit('sendNewGroup', { idReceiver });
+  }
+
+  listenNewGroup() {
+    return new Observable((observer) => {
+      this.socket.on(`getNewGroup`, (obj) => {
+        observer.next(obj);
+      });
+    });
+  }
 }

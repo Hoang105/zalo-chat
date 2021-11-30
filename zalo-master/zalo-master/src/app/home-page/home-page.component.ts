@@ -20,6 +20,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageModel } from '../shared/model/message.model';
 import { RoomModel } from '../shared/model/room.model';
 import { takeUntil } from 'rxjs/operators';
+import { DialogCreateGroupComponent } from '../dialog-create-group/dialog-create-group.component';
 
 @Component({
   selector: 'app-home-page',
@@ -159,14 +160,13 @@ export class HomePageComponent implements OnDestroy, OnInit {
     this.notifyService.listenMessageReceive(this.userId).subscribe((data) => {
       this.preLoadInvitation();
     });
-
-    // this.notifyService
-    //   .listenMessage()
-    //   .pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe((data) => {
-    //     // debugger;
-    //   });
-
+    this.notifyService
+      .listenNewGroup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => {
+        debugger;
+        this.ngOnInit();
+      });
     const userNameModal = {
       userId: this.userId,
     };
@@ -236,6 +236,20 @@ export class HomePageComponent implements OnDestroy, OnInit {
   openFindFriendDialog() {
     const dialogFindFriend = this.dialog.open(DialogFindfriendComponent, {
       width: '350px',
+    });
+  }
+  openCreateGroup() {
+    const dialogCreate = this.dialog.open(DialogCreateGroupComponent, {
+      width: '500px',
+    });
+    dialogCreate.afterClosed().subscribe((result) => {
+      this.ngOnInit();
+      const memberReceives = result.roomMember.filter(
+        (member) => member !== this.userId
+      );
+      memberReceives.forEach((idReceiver) => {
+        this.notifyService.sendNewGroup(idReceiver);
+      });
     });
   }
   async getBoxChat(itemBoxChat) {

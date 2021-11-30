@@ -18,6 +18,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { pipe, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { send } from 'process';
 
 @Component({
   selector: 'app-content-chat',
@@ -35,7 +37,8 @@ export class ContentChatComponent
     private storageService: StorageService,
     private notifyService: NotifyService,
     private dataFriendsService: DataFriendsService,
-    private dbLocalService: DbLocalService
+    private dbLocalService: DbLocalService,
+    private http: HttpClient
   ) {}
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -76,32 +79,14 @@ export class ContentChatComponent
     let user = this.roomChat.roomMember.find((x) => x.userid === owner);
     // return user.username;
   }
-
-  async sendMessage(message: string) {
+  sendMessage(message: string) {
     const memberReceives = this.roomChat.roomMember.filter(
       (member) => member != this.userid
     );
     const member = this.roomChat.roomMember;
-    if (message.length > 0) {
-      let mess = new ChatModel(
-        this.roomChat.roomId,
-        this.userid,
-        this.username,
-        this.avatarUrl,
-        member,
-        message
-      );
-      // this.notifyService.sendMessageReceive(this.userid, message);
-      const listMessage = this.dbLocalService.listMessage.getValue();
-      listMessage.unshift(mess);
-      // listMessage.shift();
-      this.dbLocalService.changeListMessage(listMessage);
-      memberReceives.forEach((idReceiver) => {
-        this.notifyService.sendMessage(idReceiver, listMessage);
-      });
-      this.chatService.putMessage(mess);
-    }
+    this.send(memberReceives, member, message, '');
   }
+
   scrollToBottom(): void {
     try {
       this.scrollContentChat.nativeElement.scrollTop =
@@ -110,5 +95,37 @@ export class ContentChatComponent
   }
   ngAfterViewChecked() {
     this.scrollToBottom();
+  }
+  dataImage: any;
+  async uploadImage(file) {
+    let memberReceives = this.roomChat.roomMember.filter(
+      (member) => member != this.userid
+    );
+    let member = this.roomChat.roomMember;
+    if (file != undefined) {
+      const data = await this.chatService.putImage(file);
+      this.send(memberReceives, member, '', data.image);
+    }
+  }
+
+  private send(memberReceives, member, message: string, image: string) {
+    let mess = new ChatModel(
+      this.roomChat.roomId,
+      this.userid,
+      this.username,
+      this.avatarUrl,
+      member,
+      message,
+      image
+    );
+    // this.notifyService.sendMessageReceive(this.userid, message);
+    const listMessage = this.dbLocalService.listMessage.getValue();
+    listMessage.unshift(mess);
+    // listMessage.shift();
+    this.dbLocalService.changeListMessage(listMessage);
+    memberReceives.forEach((idReceiver) => {
+      this.notifyService.sendMessage(idReceiver, listMessage);
+    });
+    this.chatService.putMessage(mess);
   }
 }
