@@ -1,7 +1,8 @@
 <div>
   <div style="text-align: center"><h1>Chọn bạn bè</h1></div>
-  <div *ngFor="let item of listFriend; let i = index" class="list-friend">
-    <div>
+  <div><h4>Danh sách bạn bè</h4></div>
+  <div class="list-friend">
+    <div class="item-friend" *ngFor="let item of listFriend; let i = index">
       <input
         style="margin-right: 10px"
         type="checkbox"

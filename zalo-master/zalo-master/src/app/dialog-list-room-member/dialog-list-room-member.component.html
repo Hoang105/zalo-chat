@@ -4,7 +4,7 @@
   </div>
   <div>
     <ng-container *ngFor="let item of listMember">
-      <div>
+      <div class="item-member">
         {{ item?.username
         }}<button mat-icon-button (click)="deleteMember(item?.userid)">
           Xoá
