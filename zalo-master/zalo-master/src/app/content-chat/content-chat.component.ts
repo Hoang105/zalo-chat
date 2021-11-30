@@ -20,6 +20,8 @@ import {
 import { pipe, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { send } from 'process';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogListRoomMemberComponent } from '../dialog-list-room-member/dialog-list-room-member.component';
 
 @Component({
   selector: 'app-content-chat',
@@ -38,7 +40,8 @@ export class ContentChatComponent
     private notifyService: NotifyService,
     private dataFriendsService: DataFriendsService,
     private dbLocalService: DbLocalService,
-    private http: HttpClient
+    private http: HttpClient,
+    public dialog: MatDialog
   ) {}
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -127,5 +130,11 @@ export class ContentChatComponent
       this.notifyService.sendMessage(idReceiver, listMessage);
     });
     this.chatService.putMessage(mess);
+  }
+  modelShowMember() {
+    const dialogCreate = this.dialog.open(DialogListRoomMemberComponent, {
+      width: '500px',
+      data: this.roomChat,
+    });
   }
 }

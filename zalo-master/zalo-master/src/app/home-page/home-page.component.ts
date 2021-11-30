@@ -164,7 +164,6 @@ export class HomePageComponent implements OnDestroy, OnInit {
       .listenNewGroup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data) => {
-        debugger;
         this.ngOnInit();
       });
     const userNameModal = {
