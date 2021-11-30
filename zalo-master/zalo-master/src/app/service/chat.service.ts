@@ -4,6 +4,7 @@ import * as io from 'socket.io-client';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Url } from '../shared/url';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +40,14 @@ export class ChatService {
 
   async putMessage(model: any): Promise<any> {
     return this.http.post<any>(this.url + '/api/putMessage', model).toPromise();
+  }
+
+  async putImage(file: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('image', file[0]);
+    return await this.http
+      .post<any>(this.url + '/file', formData)
+      .pipe(map((res) => res))
+      .toPromise();
   }
 }

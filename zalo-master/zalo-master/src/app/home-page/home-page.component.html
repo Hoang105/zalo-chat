@@ -58,7 +58,7 @@
         <button mat-icon-button (click)="openFindFriendDialog()">
           <mat-icon>person_search</mat-icon>
         </button>
-        <button mat-icon-button>
+        <button mat-icon-button (click)="openCreateGroup()">
           <mat-icon>add_comment</mat-icon>
         </button>
       </div>
@@ -68,7 +68,9 @@
         <app-list-item-chat></app-list-item-chat>
       </div>
       <div *ngSwitchCase="'contact'">
-        <app-list-item-contact (emitItemBoxChat)="getBoxChat($event)"></app-list-item-contact>
+        <app-list-item-contact
+          (emitItemBoxChat)="getBoxChat($event)"
+        ></app-list-item-contact>
       </div>
       <div *ngSwitchCase="'invitations'">
         <app-list-item-invitations></app-list-item-invitations>

@@ -1,0 +1,19 @@
+<div>
+  <div style="text-align: center"><h1>Chọn bạn bè</h1></div>
+  <div *ngFor="let item of listFriend; let i = index" class="list-friend">
+    <div>
+      <input
+        style="margin-right: 10px"
+        type="checkbox"
+        [value]="item.userid"
+        [ngModel]="item.isCheck"
+        (change)="checkCheckBoxvalue($event, i)"
+      />{{ item.username }}
+    </div>
+  </div>
+  <div style="text-align: end">
+    <button mat-raised-button color="accent" (click)="createGroup()">
+      Tạo
+    </button>
+  </div>
+</div>

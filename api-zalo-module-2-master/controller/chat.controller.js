@@ -66,7 +66,7 @@ module.exports.getMessageFromRoom = (req, res) => {
 
 //PK roomId
 module.exports.putMessage = (req, res) => {
-  const { PK, SK, owner, time, member, message } = req.body;
+  const { PK, SK, owner, time, member, message, image } = req.body;
   const params = {
     TableName: "chat",
     ReturnValues: "ALL_OLD",
@@ -77,6 +77,7 @@ module.exports.putMessage = (req, res) => {
       time: time,
       roomMember: member,
       message: message,
+      image: image,
     },
   };
   docClient.put(params, function (err, data) {
@@ -98,7 +99,6 @@ module.exports.putMessage = (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          io.emit(`get123`, message);
           res.json(data.Items);
         }
       });
@@ -190,19 +190,28 @@ module.exports.createNewRoomChat = (req, res) => {
     roomNotify,
     roomConversations,
     roomMember,
-    friendId,
+    leaderId,
+    deputyTeamId,
     isGroup,
   } = req.body;
+  let FilterExpression = "";
+  let ExpressionAttributeValues = {};
+  for (let i = 0; i < roomMember.length; i++) {
+    if (i === roomMember.length - 1) {
+      FilterExpression += `contains(roomMember, :${roomMember[i]})`;
+      // ExpressionAttributeValues += `":${roomMember[i]}": ${roomMember[i]}`;
+    } else {
+      FilterExpression += `contains(roomMember, :${roomMember[i]} ) and `;
+    }
+    ExpressionAttributeValues[`:${roomMember[i]}`] = roomMember[i];
+  }
+
   var params = {
     TableName: "room-chat",
-    FilterExpression:
-      "contains(roomMember, :userId ) and contains(roomMember, :friendId )",
+    FilterExpression: `${FilterExpression}`,
     ScanIndexForward: false,
     Limit: 500,
-    ExpressionAttributeValues: {
-      ":userId": userId,
-      ":friendId": friendId,
-    },
+    ExpressionAttributeValues: ExpressionAttributeValues,
   };
 
   docClient.scan(params, function (err, data) {
@@ -224,6 +233,8 @@ module.exports.createNewRoomChat = (req, res) => {
             roomNotify: roomNotify,
             roomConversations: roomConversations,
             roomName: roomName,
+            leadId: leaderId,
+            deputyTeamId: deputyTeamId,
             roomMember: docClient.createSet(roomMember),
           },
         };
@@ -240,6 +251,8 @@ module.exports.createNewRoomChat = (req, res) => {
               roomNotify: roomNotify,
               roomConversations: roomConversations,
               roomName: roomName,
+              leadId: leaderId,
+              deputyTeamId: deputyTeamId,
               roomMember: roomMember,
             });
           }
@@ -250,4 +263,3 @@ module.exports.createNewRoomChat = (req, res) => {
     }
   });
 };
-function checkRoom(userId, friendId) {}
