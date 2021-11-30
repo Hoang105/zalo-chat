@@ -76,7 +76,12 @@
                   <p *ngIf="roomChat.roomType === 'two'">
                     {{ getUserName(mess.owner) }}
                   </p>
-                  <div>{{ mess.message }}</div>
+                  <ng-container *ngIf="!mess.message.length < 1">
+                    <div>{{ mess.message }}</div>
+                  </ng-container>
+                  <ng-container *ngIf="mess.message.length < 1">
+                    <img [src]="mess.image" alt="" width="100px" />
+                  </ng-container>
                   <p>{{ mess.time | date: "hh:mm" }}</p>
                 </div>
               </div>
