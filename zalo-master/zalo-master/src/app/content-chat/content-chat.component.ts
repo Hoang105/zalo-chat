@@ -22,6 +22,7 @@ import { HttpClient } from '@angular/common/http';
 import { send } from 'process';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogListRoomMemberComponent } from '../dialog-list-room-member/dialog-list-room-member.component';
+import { GetUserService } from '../service/get-user.service';
 
 @Component({
   selector: 'app-content-chat',
@@ -41,7 +42,8 @@ export class ContentChatComponent
     private dataFriendsService: DataFriendsService,
     private dbLocalService: DbLocalService,
     private http: HttpClient,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private userService: GetUserService
   ) {}
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -55,8 +57,9 @@ export class ContentChatComponent
   listConversation = [];
   messageChat: ChatModel;
   roomid = '';
+  allUserInfor: any[];
   private ngUnsubscribe = new Subject();
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dbLocalService.currentListMessage.subscribe((value) => {
       this.listConversation = value;
     });
@@ -66,6 +69,7 @@ export class ContentChatComponent
         this.listConversation = room.roomConversations;
       }
     });
+    this.allUserInfor = await this.userService.getAllUser();
     this.notifyService
       .listenMessage()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -75,12 +79,12 @@ export class ContentChatComponent
   }
 
   getImage(owner) {
-    let user = this.roomChat.roomMember.find((x) => x.userid === owner);
-    // return user.imgurl;
+    let user = this?.allUserInfor.find((x) => x.userid === owner);
+    return user.imgurl;
   }
   getUserName(owner) {
-    let user = this.roomChat.roomMember.find((x) => x.userid === owner);
-    // return user.username;
+    let user = this?.allUserInfor.find((x) => x.userid === owner);
+    return user.username;
   }
   sendMessage(message: string) {
     const memberReceives = this.roomChat.roomMember.filter(

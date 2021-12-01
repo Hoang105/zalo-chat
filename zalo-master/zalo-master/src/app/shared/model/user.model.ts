@@ -4,4 +4,5 @@ export class UserModel {
   gender: string;
   birthday: string;
   password: string;
+  image: string;
 }

@@ -22,6 +22,12 @@ export class GetUserService {
     return await this.http.get(`${this.url}/api/user/${userid}`).toPromise();
   }
 
+  async getAllUser(): Promise<any> {
+    return await this.http
+      .post(`${this.url}/api/user/getAllUser`, {})
+      .toPromise();
+  }
+
   async updateInfo(model: UserModel): Promise<any> {
     return await this.http
       .post<any>(this.url + '/api/updateinfo', model)

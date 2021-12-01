@@ -20,6 +20,18 @@ module.exports.getUser = (req, res) => {
     }
   });
 };
+module.exports.getAllUser = (req, res) => {
+  var params = {
+    TableName: "user-zalo",
+  };
+  docClient.scan(params, function (err, data) {
+    if (err) {
+      res.status(200).send(err);
+    } else {
+      res.json(data.Items);
+    }
+  });
+};
 module.exports.updateInfo = (req, res) => {
   const { id, password, birthday, gender, username } = req.body;
   console.log(req.body);
@@ -48,7 +60,7 @@ module.exports.updateInfo = (req, res) => {
   });
 };
 module.exports.register = (req, res) => {
-  const { id, password, birthday, gender, username } = req.body;
+  const { id, password, birthday, gender, username, image } = req.body;
   const newPassword = password + code;
   var crypto = require("crypto-js");
   var hash = crypto.AES.encrypt(newPassword, code).toString();
@@ -82,7 +94,7 @@ module.exports.register = (req, res) => {
           birthday: birthday,
           gender: gender,
           username: username,
-          imgurl: "https://material.angular.io/assets/img/examples/shiba2.jpg",
+          imgurl: image,
         },
       };
       docClient.put(params2, function (err, data) {
@@ -96,6 +108,7 @@ module.exports.register = (req, res) => {
               birthday: birthday,
               gender: gender,
               username: username,
+              imgurl: image,
             },
           });
         }
