@@ -61,9 +61,9 @@ export class RegisterComponent implements OnInit {
     this.dataUser.birthday = SearchDate.formatDateNoTime(
       this.dataUser.birthday
     );
+    this.dataUser.image = 'assets/default_user.png';
     let res = await this.userService.register(this.dataUser);
     if (res.Item) {
-      // alert("Bạn đã đăng ký thành công, nhấn ok để đến trang chủ");
       this.loginModel.id = res.Item.id;
       this.loginModel.password = res.Item.password;
       await this.loginService.login(this.loginModel);
